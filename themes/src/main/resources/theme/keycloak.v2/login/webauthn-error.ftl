@@ -1,0 +1,59 @@
+<#import "template.ftl" as layout>
+<#import "buttons.ftl" as buttons>
+
+<@layout.registrationLayout ; section>
+    <#if section = "header">
+        ${msg("webauthn-error-title")}
+
+    <#elseif section = "form">
+        <script nonce="${cspNonce}" type="text/javascript">
+            <#outputformat "JavaScript">
+                const refreshPage = () => {
+                    document.getElementById('isSetRetry').value = 'retry';
+                    document.getElementById('executionValue').value = ${execution?c};
+                    document.getElementById('kc-error-credential-form').requestSubmit();
+                };
+
+                document.getElementById('kc-try-again').addEventListener('click', refreshPage);
+            </#outputformat>
+        </script>
+
+        <form id="kc-error-credential-form"
+              class="${properties.kcFormClass!}"
+              action="${url.loginAction}"
+              method="post"
+              hidden="hidden">
+
+            <input type="hidden"
+                   id="executionValue"
+                   name="authenticationExecution"/>
+
+            <input type="hidden"
+                   id="isSetRetry"
+                   name="isSetRetry"/>
+
+            <@buttons.actionGroup horizontal=true>
+                <@buttons.button
+                    id="kc-try-again"
+                    name="try-again"
+                    label="doTryAgain"
+                />
+
+                <#if isAppInitiatedAction??>
+                    <form action="${url.loginAction}"
+                          class="${properties.kcFormClass!}"
+                          id="kc-webauthn-settings-form"
+                          method="post">
+
+                        <@buttons.button
+                            id="cancelWebAuthnAIA"
+                            name="cancel-aia"
+                            label="doCancel"
+                            type="secondary"
+                        />
+                    </form>
+                </#if>
+            </@buttons.actionGroup>
+        </form>
+    </#if>
+</@layout.registrationLayout>

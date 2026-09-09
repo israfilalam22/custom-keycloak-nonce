@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brac-fms-uat-keycloak
+  namespace: brac-fms-uat
+spec:
+  selector:
+    matchLabels:
+      app: brac-fms-uat-keycloak
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubernetes.io/change-cause: "img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp4"
+      labels:
+        app: brac-fms-uat-keycloak
+    spec:
+      volumes:
+        - name: keycloak-fms-pv-themes
+          persistentVolumeClaim:
+            claimName: keycloak-fms-pvc-themes
+      containers:
+        - name: brac-fms-uat-keycloak
+          image: img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp4
+          args: ["start"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: "/opt/keycloak/themes"
+              name: keycloak-fms-pv-themes
+          envFrom:
+            - configMapRef:
+                name: brac-fms-uat-cmp
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: brac-fms-uat-secret
+                  key: KC_BOOTSTRAP_ADMIN_USERNAME
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: brac-fms-uat-secret
+                  key: KC_BOOTSTRAP_ADMIN_PASSWORD
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: brac-fms-uat-secret
+                  key: KC_DB_USERNAME
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: brac-fms-uat-secret
+                  key: KC_DB_PASSWORD
+          ports:
+            - name: idp-cport
+              containerPort: 8080
+      hostAliases:                
+        - ip: "103.106.118.68"
+          hostnames:
+            - "mail.ba-systems.com"                
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: brac-fms-uat-keycloak
+  namespace: brac-fms-uat
+spec:
+  selector:
+    app: brac-fms-uat-keycloak
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+

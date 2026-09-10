@@ -92,7 +92,9 @@ public class IframeUtil {
         if (resource != null) {
             session.getProvider(SecurityHeadersProvider.class)
                     .options()
-                    .allowAnyFrameAncestor();
+                    .allowFrameAncestors(
+                            "'self' https://fms.bd.bracbank.com https://fmsprod.bd.bracbank.com"
+                    );
 
             return Response.ok(resource)
                     .cacheControl(cacheControl)

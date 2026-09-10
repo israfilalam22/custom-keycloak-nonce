@@ -20,6 +20,8 @@ public interface SecurityHeadersOptions {
 
     SecurityHeadersOptions allowFrameSrc(String source);
 
+    SecurityHeadersOptions allowFrameAncestors(String sources);
+
     SecurityHeadersOptions allowAnyFrameAncestor();
 
     SecurityHeadersOptions skipHeaders();

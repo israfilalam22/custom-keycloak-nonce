@@ -118,6 +118,11 @@ public class DefaultSecurityHeadersProvider implements SecurityHeadersProvider {
             addHeader(header, headers);
         }
 
+        // Remove X-Frame-Options when explicit cross-origin frame ancestors are configured.
+        if (options != null && options.getAllowedFrameAncestors() != null) {
+            headers.remove(BrowserSecurityHeaders.X_FRAME_OPTIONS.getHeaderName());
+        }
+
         Object cspVal = headers.getFirst(CONTENT_SECURITY_POLICY.getHeaderName());
 
         if (cspVal != null) {
@@ -139,7 +144,11 @@ public class DefaultSecurityHeadersProvider implements SecurityHeadersProvider {
              * only when a caller explicitly invokes options().
              */
             if (options != null) {
-                if (options.isAllowAnyFrameAncestor() && csp.isDefaultFrameAncestors()) {
+                String allowedFrameAncestors = options.getAllowedFrameAncestors();
+
+                if (allowedFrameAncestors != null) {
+                    csp.frameAncestors(allowedFrameAncestors);
+                } else if (options.isAllowAnyFrameAncestor() && csp.isDefaultFrameAncestors()) {
                     csp.frameAncestors(null);
                 }
 

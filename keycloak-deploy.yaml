@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubernetes.io/change-cause: "img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp4"
+        kubernetes.io/change-cause: "img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp-final"
       labels:
         app: brac-fms-uat-keycloak
     spec:
@@ -21,7 +21,7 @@ spec:
             claimName: keycloak-fms-pvc-themes
       containers:
         - name: brac-fms-uat-keycloak
-          image: img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp4
+          image: img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp-final
           args: ["start"]
           imagePullPolicy: IfNotPresent
           volumeMounts:

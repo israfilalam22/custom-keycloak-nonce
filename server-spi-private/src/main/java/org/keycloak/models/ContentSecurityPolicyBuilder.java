@@ -22,6 +22,9 @@ import java.util.Map;
 public class ContentSecurityPolicyBuilder {
 
     // constants for directive names used in the class
+    public static final String DIRECTIVE_NAME_DEFAULT_SRC = "default-src";
+    public static final String DIRECTIVE_NAME_BASE_URI = "base-uri";
+    public static final String DIRECTIVE_NAME_FORM_ACTION = "form-action";
     public static final String DIRECTIVE_NAME_FRAME_SRC = "frame-src";
     public static final String DIRECTIVE_NAME_FRAME_ANCESTORS = "frame-ancestors";
     public static final String DIRECTIVE_NAME_OBJECT_SRC = "object-src";
@@ -36,13 +39,47 @@ public class ContentSecurityPolicyBuilder {
 
     public static ContentSecurityPolicyBuilder create() {
         return new ContentSecurityPolicyBuilder()
+                .add(DIRECTIVE_NAME_DEFAULT_SRC, DIRECTIVE_VALUE_SELF)
+                .add(DIRECTIVE_NAME_BASE_URI, DIRECTIVE_VALUE_SELF)
+                .add(DIRECTIVE_NAME_FORM_ACTION, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_FRAME_SRC, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_FRAME_ANCESTORS, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_OBJECT_SRC, DIRECTIVE_VALUE_NONE);
     }
 
     public static ContentSecurityPolicyBuilder create(String directives) {
-        return new ContentSecurityPolicyBuilder().parse(directives);
+        return new ContentSecurityPolicyBuilder()
+                .parse(directives)
+                .defaultSrc(DIRECTIVE_VALUE_SELF)
+                .baseUri(DIRECTIVE_VALUE_SELF)
+                .formAction(DIRECTIVE_VALUE_SELF);
+    }
+
+    public ContentSecurityPolicyBuilder defaultSrc(String defaultSrc) {
+        if (defaultSrc == null) {
+            directives.remove(DIRECTIVE_NAME_DEFAULT_SRC);
+        } else {
+            put(DIRECTIVE_NAME_DEFAULT_SRC, defaultSrc);
+        }
+        return this;
+    }
+
+    public ContentSecurityPolicyBuilder baseUri(String baseUri) {
+        if (baseUri == null) {
+            directives.remove(DIRECTIVE_NAME_BASE_URI);
+        } else {
+            put(DIRECTIVE_NAME_BASE_URI, baseUri);
+        }
+        return this;
+    }
+
+    public ContentSecurityPolicyBuilder formAction(String formAction) {
+        if (formAction == null) {
+            directives.remove(DIRECTIVE_NAME_FORM_ACTION);
+        } else {
+            put(DIRECTIVE_NAME_FORM_ACTION, formAction);
+        }
+        return this;
     }
 
     public ContentSecurityPolicyBuilder frameSrc(String frameSrc) {

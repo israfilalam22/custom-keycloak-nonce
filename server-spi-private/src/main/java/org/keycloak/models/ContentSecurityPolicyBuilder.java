@@ -41,7 +41,14 @@ public class ContentSecurityPolicyBuilder {
         return new ContentSecurityPolicyBuilder()
                 .add(DIRECTIVE_NAME_DEFAULT_SRC, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_BASE_URI, DIRECTIVE_VALUE_SELF)
-                .add(DIRECTIVE_NAME_FORM_ACTION, DIRECTIVE_VALUE_SELF)
+                .add(
+                        DIRECTIVE_NAME_FORM_ACTION,
+                        DIRECTIVE_VALUE_SELF
+                                + " https://fms.bd.bracbank.com"
+                                + " https://fmsidp.bd.bracbank.com"
+                                + " https://fmsprod.bd.bracbank.com"
+                                + " https://fmsprodidp.bd.bracbank.com"
+                )
                 .add(DIRECTIVE_NAME_FRAME_SRC, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_FRAME_ANCESTORS, DIRECTIVE_VALUE_SELF)
                 .add(DIRECTIVE_NAME_OBJECT_SRC, DIRECTIVE_VALUE_NONE);
@@ -52,7 +59,13 @@ public class ContentSecurityPolicyBuilder {
                 .parse(directives)
                 .defaultSrc(DIRECTIVE_VALUE_SELF)
                 .baseUri(DIRECTIVE_VALUE_SELF)
-                .formAction(DIRECTIVE_VALUE_SELF);
+                .formAction(
+                        DIRECTIVE_VALUE_SELF
+                                + " https://fms.bd.bracbank.com"
+                                + " https://fmsidp.bd.bracbank.com"
+                                + " https://fmsprod.bd.bracbank.com"
+                                + " https://fmsprodidp.bd.bracbank.com"
+                );
     }
 
     public ContentSecurityPolicyBuilder defaultSrc(String defaultSrc) {

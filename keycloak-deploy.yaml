@@ -21,7 +21,7 @@ spec:
             claimName: keycloak-fms-pvc-themes
       containers:
         - name: brac-fms-uat-keycloak
-          image: img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp-final
+          image: img-regv2.oss.net.bd/idp/keycloak-custom-nonce:26.7.3-csp-final-v1
           args: ["start"]
           imagePullPolicy: IfNotPresent
           volumeMounts:
